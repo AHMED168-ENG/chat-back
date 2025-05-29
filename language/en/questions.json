@@ -1,0 +1,34 @@
+{
+  "questions": {
+    "question_required": "Question is required",
+    "question_invalid": "Invalid question",
+    "question_arabic_required": "Arabic question is required",
+    "question_arabic_invalid": "Invalid Arabic question",
+    "answer_required": "Answer is required",
+    "answer_invalid": "Invalid answer",
+    "answer_arabic_required": "Arabic answer is required",
+    "answer_arabic_invalid": "Invalid Arabic answer",
+    "id_required": "Question ID is required",
+    "id_invalid": "Invalid question ID",
+    "keywords_en_invalid": "Invalid English keywords",
+    "keywords_ar_invalid": "Invalid Arabic keywords",
+    "excel_file_required": "Excel file is required",
+    "question_not_found": "Question not found",
+    "question_added": "Question added successfully",
+    "question_updated": "Question updated successfully",
+    "question_deleted": "Question deleted successfully",
+    "faqs_imported": "FAQs imported successfully",
+    "error": "An error occurred",
+    "invalid_search": "Invalid search term",
+    "page_min": "Page must be at least 1",
+    "limit_min": "Limit must be at least 1",
+    "limit_max": "Limit must not exceed 100",
+    "invalid_sort_field": "Invalid sort field",
+    "invalid_sort_order": "Invalid sort order"
+  },
+  "chatgpt": {
+    "question_required": "Question is required",
+    "question_invalid": "Invalid question",
+    "error": "Error processing your request"
+  }
+}

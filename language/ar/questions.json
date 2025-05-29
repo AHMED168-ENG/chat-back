@@ -1,0 +1,37 @@
+
+
+{
+    "questions": {
+      "question_required": "السؤال مطلوب",
+      "question_invalid": "سؤال غير صالح",
+      "question_arabic_required": "السؤال بالعربية مطلوب",
+      "question_arabic_invalid": "سؤال عربي غير صالح",
+      "answer_required": "الإجابة مطلوبة",
+      "answer_invalid": "إجابة غير صالحة",
+      "answer_arabic_required": "الإجابة بالعربية مطلوبة",
+      "answer_arabic_invalid": "إجابة عربية غير صالحة",
+      "id_required": "معرف السؤال مطلوب",
+      "id_invalid": "معرف سؤال غير صالح",
+      "keywords_en_invalid": "كلمات مفتاحية إنجليزية غير صالحة",
+      "keywords_ar_invalid": "كلمات مفتاحية عربية غير صالحة",
+      "excel_file_required": "ملف الإكسل مطلوب",
+      "question_not_found": "السؤال غير موجود",
+      "question_added": "تم إضافة السؤال بنجاح",
+      "question_updated": "تم تحديث السؤال بنجاح",
+      "question_deleted": "تم حذف السؤال بنجاح",
+      "faqs_imported": "تم استيراد الأسئلة الشائعة بنجاح",
+      "error": "حدث خطأ",
+      "invalid_search": "مصطلح بحث غير صالح",
+      "page_min": "الصفحة يجب أن تكون 1 على الأقل",
+      "limit_min": "الحد يجب أن يكون 1 على الأقل",
+      "limit_max": "الحد يجب ألا يتجاوز 100",
+      "invalid_sort_field": "حقل فرز غير صالح",
+      "invalid_sort_order": "ترتيب فرز غير صالح"
+    },
+    "chatgpt": {
+      "question_required": "السؤال مطلوب",
+      "question_invalid": "سؤال غير صالح",
+      "error": "خطأ في معالجة طلبك"
+    }
+  }
+

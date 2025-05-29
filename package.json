@@ -1,0 +1,31 @@
+{
+  "name": "chat-system",
+  "version": "1.0.0",
+  "description": "Standalone chat system for companies",
+  "main": "server.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "nodemon server.js",
+    "migrate": "sequelize db:migrate"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "bcrypt": "^6.0.0",
+    "chat-system": "file:",
+    "dotenv": "^16.4.0",
+    "express": "^4.17.1",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.14.1",
+    "openai": "^4.103.0",
+    "pg": "^8.13.0",
+    "sequelize": "^7.0.0-alpha.42",
+    "socket.io": "^4.7.5",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7",
+    "sequelize-cli": "^6.6.2"
+  }
+}
