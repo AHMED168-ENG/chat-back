@@ -112,8 +112,6 @@ const setupSocket = (server) => {
           }
         }
 
-        socket.leave(`chat_${data.chat_id}`);
-
         socket.join(roomId);
         const socketsInRoom = await io.in(roomId).allSockets();
         console.log("*".repeat(100));
