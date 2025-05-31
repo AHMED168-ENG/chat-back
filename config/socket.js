@@ -6,7 +6,6 @@ const {
   ChatConversations,
   ChatQueue,
 } = require("../models/index.js");
-const { getAvailableAgent } = require("../utility/clientApi.js");
 
 const setupSocket = (server) => {
   const io = new Server(server, {
@@ -104,17 +103,16 @@ const setupSocket = (server) => {
           return;
         }
 
-        const currentRooms = Array.from(socket.rooms).filter((room) =>
-          room.startsWith("conversation_")
-        );
-        currentRooms.forEach((room) => {
-          socket.leave(room);
-          console.log(`User ${userId} left room ${room}`);
-        });
-
         // إضافة المستخدم إلى الـ room
         const roomId = `conversation_${chat_id}`;
-        console.log(Array.from(socket.rooms));
+
+        for (const room of socket.rooms) {
+          if (room !== socket.id) {
+            socket.leave(room);
+          }
+        }
+
+        socket.leave(`chat_${data.chat_id}`);
 
         socket.join(roomId);
         const socketsInRoom = await io.in(roomId).allSockets();
@@ -151,6 +149,7 @@ const setupSocket = (server) => {
     // مغادرة غرفة محادثة
     socket.on("leave_chat", ({ chat_id }) => {
       const roomId = `conversation_${chat_id}`;
+      socket.leave(roomId);
       console.log(`User ${socket.userId} left chat ${chat_id}`);
       socket.to(roomId).emit("user_left", {
         user_id: socket.userId,
@@ -280,7 +279,7 @@ const setupSocket = (server) => {
     //       ],
     //       order: [["created_at", "ASC"]],
     //     });
-    //     console.log(queuedConversation);
+
     //     if (!queuedConversation) {
     //       console.log("No queued conversations found.");
     //       return;
@@ -290,7 +289,7 @@ const setupSocket = (server) => {
 
     //     // جلب وكيل متاح من الـ API الخارجية
     //     const { agentId, agentName } = await getAvailableAgent();
-    //     console.log({ agentId, agentName });
+
     //     if (!agentId) {
     //       console.log("No available agent found.");
     //       return;
