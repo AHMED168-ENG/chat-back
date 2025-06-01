@@ -106,11 +106,11 @@ const setupSocket = (server) => {
         // إضافة المستخدم إلى الـ room
         const roomId = `conversation_${chat_id}`;
 
-        for (const room of socket.rooms) {
-          if (room !== socket.id) {
-            socket.leave(room);
-          }
-        }
+        // for (const room of socket.rooms) {
+        //   if (room !== socket.id) {
+        //     socket.leave(room);
+        //   }
+        // }
 
         socket.join(roomId);
         const socketsInRoom = await io.in(roomId).allSockets();
