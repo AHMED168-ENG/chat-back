@@ -76,7 +76,11 @@ data.startConversation = async (req, res) => {
           agent_name: agentName,
         });
       }
-
+      socket.emit("join_chat", {
+        chat_id: conversation.id,
+        userId,
+        userType: "customer",
+      });
       // إرسال إشعار للـ room (للعميل)
       global.io.to(`conversation_${conversation.id}`).emit("agent_assigned", {
         conversation_id: conversation.id,
