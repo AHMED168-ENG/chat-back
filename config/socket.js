@@ -94,7 +94,7 @@ const setupSocket = (server) => {
         const conversation = await ChatConversations.findOne({
           where: {
             id: chat_id,
-            [userType === "customer" ? "customer_id" : "crm_agent_id"]: userId,
+            // [userType === "customer" ? "customer_id" : "crm_agent_id"]: userId,
           },
         });
 
