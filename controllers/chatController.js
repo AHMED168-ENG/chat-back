@@ -26,17 +26,21 @@ data.startConversation = async (req, res) => {
     });
 
     if (existingConversation) {
-      return res.status(400).json({
-        ack: 0,
-        msg:
-          language[lang].chat.existing_conversation ||
-          "لديك محادثة نشطة بالفعل",
-        conversation_id: existingConversation.id,
-      });
+      // return res.status(400).json({
+      //   ack: 0,
+      //   msg:
+      //     language[lang].chat.existing_conversation ||
+      //     "لديك محادثة نشطة بالفعل",
+      //   conversation_id: existingConversation.id,
+      // });
+      await ChatConversations.update(
+        { status: "closed", closed_at: new Date(), updated_at: new Date() },
+        { where: { id: existingConversation.id } }
+      );
     }
 
     const { agentId, agentName } = await getAvailableAgent();
-    console.log(agentId, agentName);
+    // console.log(agentId, agentName);
     const conversationData = {
       customer_id: userId,
       subject: subject || language[lang].chat.default_subject,
@@ -67,8 +71,7 @@ data.startConversation = async (req, res) => {
       const agent = await OnlineAgents.findOne({
         where: { agent_id: agentId },
       });
-      console.log(agent);
-      console.log(agent.socket_id);
+
       if (agent && agent.socket_id) {
         global.io.to(agent.socket_id).emit("agent_assigned", {
           conversation_id: conversation.id,
