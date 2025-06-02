@@ -136,6 +136,12 @@ const setupSocket = (server) => {
             { last_ping: new Date(), is_available: true },
             { where: { agent_id: userId } }
           );
+          // إرسال إشعار لكل الموجودين في الغرفة ما عدا الوكيل
+          socket.to(roomId).emit("agent_assigned", {
+            conversation_id: conversation.id,
+            agent_id: userId,
+            agent_name: "وكيل", // استخدام اسم الوكيل من OnlineAgents أو قيمة افتراضية
+          });
         }
 
         socket.emit("chat_joined", { chat_id, userId, userType });

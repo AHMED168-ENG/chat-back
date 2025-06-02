@@ -79,13 +79,6 @@ data.startConversation = async (req, res) => {
           agent_name: agentName,
         });
       }
-
-      // إرسال إشعار للـ room (للعميل)
-      global.io.to(`conversation_${conversation.id}`).emit("agent_assigned", {
-        conversation_id: conversation.id,
-        agent_id: agentId,
-        agent_name: agentName,
-      });
     }
 
     res.status(200).json({
