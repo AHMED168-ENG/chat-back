@@ -173,8 +173,8 @@ const setupSocket = (server) => {
             where: {
               id: chat_id,
               status: { [Op.in]: ["waiting", "active"] },
-              [socket.userType === "customer" ? "customer_id" : "crm_agent_id"]:
-                socket.userId,
+              // [socket.userType === "customer" ? "customer_id" : "crm_agent_id"]:
+              //   socket.userId,
             },
           });
 
