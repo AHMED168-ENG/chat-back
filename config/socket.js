@@ -6,6 +6,7 @@ const {
   ChatConversations,
   ChatQueue,
 } = require("../models/index.js");
+const { getAvailableAgent } = require("../utility/clientApi.js");
 
 const setupSocket = (server) => {
   const io = new Server(server, {
