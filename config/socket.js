@@ -142,6 +142,11 @@ const setupSocket = (server) => {
             agent_id: userId,
             agent_name: "وكيل", // استخدام اسم الوكيل من OnlineAgents أو قيمة افتراضية
           });
+          console.log({
+            conversation_id: conversation.id,
+            agent_id: userId,
+            agent_name: "وكيل", // استخدام اسم الوكيل من OnlineAgents أو قيمة افتراضية
+          });
         }
 
         socket.emit("chat_joined", { chat_id, userId, userType });
