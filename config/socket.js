@@ -141,8 +141,8 @@ const setupSocket = (server) => {
           //   conversation_id: conversation.id,
           //   agent_id: userId,
           // });
-          io.to(`conversation_${roomId}`).emit("agent_assigned", {
-            conversation_id: roomId,
+          io.to(`conversation_${chat_id}`).emit("agent_assigned", {
+            conversation_id: chat_id,
             agent_id: userId,
             agent_name: "وكيل", // استخدام اسم الوكيل من OnlineAgents أو قيمة افتراضية
           });
