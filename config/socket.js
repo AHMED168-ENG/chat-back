@@ -137,15 +137,15 @@ const setupSocket = (server) => {
             { where: { agent_id: userId } }
           );
           // إرسال إشعار لكل الموجودين في الغرفة ما عدا الوكيل
-          // socket.to(roomId).emit("agent_assigned", {
-          //   conversation_id: conversation.id,
-          //   agent_id: userId,
-          // });
-          io.to(`conversation_${chat_id}`).emit("agent_assigned", {
-            conversation_id: chat_id,
+          socket.to(roomId).emit("agent_assigned", {
+            conversation_id: conversation.id,
             agent_id: userId,
-            agent_name: "وكيل", // استخدام اسم الوكيل من OnlineAgents أو قيمة افتراضية
           });
+          // io.to(`conversation_${chat_id}`).emit("agent_assigned", {
+          //   conversation_id: chat_id,
+          //   agent_id: userId,
+          //   agent_name: "وكيل", // استخدام اسم الوكيل من OnlineAgents أو قيمة افتراضية
+          // });
 
           console.log({
             conversation_id: conversation.id,
