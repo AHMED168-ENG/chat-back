@@ -284,8 +284,11 @@ const setupSocket = (server) => {
           return;
         }
 
-        const conversation = queuedConversation.ChatConversation;
-
+        const conversation = queuedConversation.conversation;
+        if (!conversation) {
+          console.log("No queued conversations found.");
+          return;
+        }
         // جلب وكيل متاح من الـ API الخارجية
         const { agentId, agentName } = await getAvailableAgent();
 
