@@ -227,6 +227,7 @@ const setupSocket = (server) => {
     socket.on("typing", ({ chat_id, is_typing }) => {
       const roomId = `conversation_${chat_id}`;
       socket.to(roomId).emit("user_typing", {
+        chat_id: chat_id,
         user_id: socket.userId,
         user_type: socket.userType,
         is_typing,
