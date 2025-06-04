@@ -114,11 +114,6 @@ const setupSocket = (server) => {
         // }
 
         socket.join(roomId);
-        const socketsInRoom = await io.in(roomId).allSockets();
-        console.log("*".repeat(100));
-        const count = socketsInRoom.size;
-        console.log(count);
-        console.log("*".repeat(100));
         socket.userId = userId;
         socket.userType = userType;
         socket.roomId = roomId;
@@ -146,12 +141,6 @@ const setupSocket = (server) => {
           //   agent_id: userId,
           //   agent_name: "وكيل", // استخدام اسم الوكيل من OnlineAgents أو قيمة افتراضية
           // });
-
-          console.log({
-            conversation_id: conversation.id,
-            agent_id: userId,
-            agent_name: "وكيل", // استخدام اسم الوكيل من OnlineAgents أو قيمة افتراضية
-          });
         }
 
         socket.emit("chat_joined", { chat_id, userId, userType });
@@ -162,10 +151,14 @@ const setupSocket = (server) => {
     });
 
     // مغادرة غرفة محادثة
-    socket.on("leave_chat", ({ chat_id }) => {
+    socket.on("leave_chat", async ({ chat_id }) => {
       const roomId = `conversation_${chat_id}`;
       socket.leave(roomId);
       console.log(`User ${socket.userId} left chat ${chat_id}`);
+      await ChatConversations.update(
+        { status: "closed", closed_at: new Date(), updated_at: new Date() },
+        { where: { id: chat_id } }
+      );
       socket.to(roomId).emit("user_left", {
         user_id: socket.userId,
         user_type: socket.userType,
