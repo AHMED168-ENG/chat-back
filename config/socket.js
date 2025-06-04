@@ -153,16 +153,16 @@ const setupSocket = (server) => {
     // مغادرة غرفة محادثة
     socket.on("leave_chat", async ({ chat_id }) => {
       const roomId = `conversation_${chat_id}`;
+      socket.to(roomId).emit("user_left", {
+        user_id: socket.userId,
+        user_type: socket.userType,
+      });
       socket.leave(roomId);
       console.log(`User ${socket.userId} left chat ${chat_id}`);
       await ChatConversations.update(
         { status: "closed", closed_at: new Date(), updated_at: new Date() },
         { where: { id: chat_id } }
       );
-      socket.to(roomId).emit("user_left", {
-        user_id: socket.userId,
-        user_type: socket.userType,
-      });
     });
 
     // إرسال رسالة في المحادثة
