@@ -226,7 +226,7 @@ const setupSocket = (server) => {
           console.log(chat_id);
           // No agent available, set status to pending
           await ChatConversations.update(
-            { status: "waiting", updated_at: new Date() },
+            { status: "active", updated_at: new Date() },
             { where: { id: chat_id } }
           );
           let x = await ChatConversations.findOne({ where: { id: chat_id } });
@@ -352,14 +352,14 @@ const setupSocket = (server) => {
           include: [
             {
               model: ChatConversations,
-              where: { status: { [Op.in]: ["waiting", "active"] } },
+              where: { status: "active" },
               as: "conversation",
               required: true,
             },
           ],
           order: [["created_at", "ASC"]],
         });
-
+        console.log(queuedConversation);
         if (!queuedConversation) {
           console.log("No queued or pending conversations found.");
           return;
