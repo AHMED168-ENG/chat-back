@@ -33,7 +33,7 @@ const setupSocket = (server) => {
   );
 
   io.on("connection", async (socket) => {
-    // await ChatQueue.destroy({ where: {} });
+    await ChatQueue.destroy({ where: {} });
     console.log("user connect" + socket.id);
     socket.on("register_agent", async ({ agentId, agentName }) => {
       try {
@@ -180,20 +180,21 @@ const setupSocket = (server) => {
       });
       socket.leave(roomId);
       console.log(`User ${socket.userId} left chat ${chat_id}`);
-
       const conversation = await ChatConversations.findOne({
         where: { id: chat_id },
       });
       await ChatQueue.destroy({
         where: { conversation_id: chat_id },
       });
+      if (!conversation.status == "closed") return;
+
       // Update conversation status based on user type
       await ChatConversations.update(
         { status: "closed", closed_at: new Date(), updated_at: new Date() },
         { where: { id: chat_id } }
       );
 
-      if (socket.userType === "agent") {
+      if (socket.userType && socket.userType === "agent") {
         const { agentId, agentName } = await getAvailableAgent();
         if (agentId) {
           // Fetch all old messages
