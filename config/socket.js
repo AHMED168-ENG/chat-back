@@ -181,7 +181,7 @@ const setupSocket = (server) => {
       socket.leave(roomId);
       console.log(`User ${socket.userId} left chat ${chat_id}`);
 
-      // Update conversation status to closed
+      // Update conversation status based on user type
       await ChatConversations.update(
         { status: "closed", closed_at: new Date(), updated_at: new Date() },
         { where: { id: chat_id } }
@@ -195,10 +195,10 @@ const setupSocket = (server) => {
           // Fetch all old messages
           const oldMessages = await ChatMessages.findAll({
             where: { conversation_id: chat_id },
-            attributes: ["id", "message", "created_at", "sender"], // Adjust attributes as needed
+            attributes: ["id", "message", "created_at", "sender"],
           });
 
-          // Reopen or update conversation with new agent
+          // Update conversation with new agent
           await ChatConversations.update(
             {
               status: "active",
@@ -222,7 +222,12 @@ const setupSocket = (server) => {
             });
           }
         } else {
-          console.log(`No available agent to reassign for chat ${chat_id}`);
+          // No agent available, set status to pending
+          await ChatConversations.update(
+            { status: "pending", updated_at: new Date() },
+            { where: { id: chat_id } }
+          );
+          console.log(`No available agent, chat ${chat_id} set to pending`);
         }
       }
     });
@@ -338,12 +343,12 @@ const setupSocket = (server) => {
     // فحص دوري لتوزيع المحادثات المنتظرة على الوكلاء المتاحين (كل 20 ثانية)
     setInterval(async () => {
       try {
-        // جلب أول محادثة في الطابور
+        // جلب أول محادثة في الطابور أو اللي في حالة pending
         const queuedConversation = await ChatQueue.findOne({
           include: [
             {
               model: ChatConversations,
-              where: { status: "waiting" },
+              where: { status: { [Op.in]: ["waiting", "pending"] } },
               as: "conversation",
               required: true,
             },
@@ -352,15 +357,16 @@ const setupSocket = (server) => {
         });
 
         if (!queuedConversation) {
-          console.log("No queued conversations found.");
+          console.log("No queued or pending conversations found.");
           return;
         }
 
         const conversation = queuedConversation.conversation;
         if (!conversation) {
-          console.log("No queued conversations found.");
+          console.log("No queued or pending conversations found.");
           return;
         }
+
         // جلب وكيل متاح من الـ API الخارجية
         const { agentId, agentName } = await getAvailableAgent();
 
@@ -368,6 +374,12 @@ const setupSocket = (server) => {
           console.log("No available agent found.");
           return;
         }
+
+        // Fetch all old messages
+        const oldMessages = await ChatMessages.findAll({
+          where: { conversation_id: conversation.id },
+          attributes: ["id", "message", "created_at", "sender"],
+        });
 
         // تحديث المحادثة بالوكيل
         await ChatConversations.update(
@@ -393,6 +405,7 @@ const setupSocket = (server) => {
             conversation_id: conversation.id,
             agent_id: agentId,
             agent_name: agentName,
+            old_messages: oldMessages,
           });
         }
 
