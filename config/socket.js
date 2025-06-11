@@ -389,7 +389,7 @@ const setupSocket = (server) => {
         await ChatConversations.update(
           {
             crm_agent_id: agentId,
-            status: "active",
+            status: "waiting",
             updated_at: new Date(),
           },
           { where: { id: conversation.id } }
