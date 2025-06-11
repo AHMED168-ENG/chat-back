@@ -195,7 +195,7 @@ const setupSocket = (server) => {
           // Fetch all old messages
           const oldMessages = await ChatMessages.findAll({
             where: { conversation_id: chat_id },
-            attributes: ["id", "message", "created_at", "sender"],
+            attributes: ["id", "message", "created_at", "sender_type"],
           });
 
           // Update conversation with new agent
