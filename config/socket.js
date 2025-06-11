@@ -183,15 +183,15 @@ const setupSocket = (server) => {
       const conversation = await ChatConversations.findOne({
         where: { id: chat_id },
       });
-
+      await ChatQueue.destroy({
+        where: { conversation_id: chat_id },
+      });
       // Update conversation status based on user type
       await ChatConversations.update(
         { status: "closed", closed_at: new Date(), updated_at: new Date() },
         { where: { id: chat_id } }
       );
-      console.log("*".repeat(20));
-      console.log(socket.userType);
-      console.log("*".repeat(20));
+
       if (socket.userType === "agent") {
         const { agentId, agentName } = await getAvailableAgent();
         if (agentId) {
@@ -475,9 +475,9 @@ const setupSocket = (server) => {
     //     );
 
     //     // حذف المحادثة من الطابور
-    //     await ChatQueue.destroy({
-    //       where: { conversation_id: conversation.id },
-    //     });
+    // await ChatQueue.destroy({
+    //   where: { conversation_id: conversation.id },
+    // });
 
     //     // جلب socket_id بتاع الوكيل
     //     const agent = await OnlineAgents.findOne({
