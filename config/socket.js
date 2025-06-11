@@ -33,7 +33,7 @@ const setupSocket = (server) => {
   );
 
   io.on("connection", async (socket) => {
-    await ChatQueue.destroy({ where: {} });
+    // await ChatQueue.destroy({ where: {} });
     console.log("user connect" + socket.id);
     socket.on("register_agent", async ({ agentId, agentName }) => {
       try {
