@@ -186,7 +186,7 @@ const setupSocket = (server) => {
         { status: "closed", closed_at: new Date(), updated_at: new Date() },
         { where: { id: chat_id } }
       );
-
+      console.log(socket);
       // Check if the leaver is an agent
       if (socket.userType === "agent") {
         const { agentId: newAgentId, agentName: newAgentName } =
