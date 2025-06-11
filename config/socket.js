@@ -256,11 +256,11 @@ const setupSocket = (server) => {
     // قطع الاتصال
     socket.on("disconnect", async (reason) => {
       console.log(`❌ User ${socket.id} disconnected:`, reason);
-      socket.broadcast.emit("user_left", {
-        message: `مستخدم غادر (${socket.id})`,
-        reason: reason,
-        time: new Date().toLocaleString("ar-EG"),
-      });
+      // socket.broadcast.emit("user_left", {
+      //   message: `مستخدم غادر (${socket.id})`,
+      //   reason: reason,
+      //   time: new Date().toLocaleString("ar-EG"),
+      // });
 
       if (socket.userType === "agent" && socket.userId) {
         try {
