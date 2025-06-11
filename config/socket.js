@@ -378,7 +378,7 @@ const setupSocket = (server) => {
         // Fetch all old messages
         const oldMessages = await ChatMessages.findAll({
           where: { conversation_id: conversation.id },
-          attributes: ["id", "message", "created_at", "sender"],
+          attributes: ["id", "message", "created_at", "sender_type"],
         });
 
         // تحديث المحادثة بالوكيل
