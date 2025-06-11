@@ -39,7 +39,6 @@ const setupSocket = (server) => {
         const agent = await OnlineAgents.findOne({
           where: { agent_id: agentId },
         });
-        // console.log(agent)
         if (agent) {
           await OnlineAgents.update(
             { socket_id: socket.id, last_ping: new Date(), is_available: true },
@@ -190,10 +189,11 @@ const setupSocket = (server) => {
         { status: "closed", closed_at: new Date(), updated_at: new Date() },
         { where: { id: chat_id } }
       );
-
+      console.log("*".repeat(20));
+      console.log(socket);
+      console.log("*".repeat(20));
       if (socket.userType === "agent") {
         const { agentId, agentName } = await getAvailableAgent();
-        console.log(agentId);
         if (agentId) {
           // Fetch all old messages
           const oldMessages = await ChatMessages.findAll({
@@ -238,8 +238,6 @@ const setupSocket = (server) => {
             { status: "waiting", updated_at: new Date() },
             { where: { id: chat_id } }
           );
-          let x = await ChatConversations.findOne({ where: { id: chat_id } });
-          console.log(x);
           console.log(`No available agent, chat ${chat_id} set to pending`);
         }
       }
@@ -428,10 +426,6 @@ const setupSocket = (server) => {
           agent_id: agentId,
           agent_name: agentName,
         });
-
-        console.log(
-          `Conversation ${conversation.id} assigned to agent ${agentId}`
-        );
       } catch (error) {
         console.error("Error in queue check:", error.message);
       }
