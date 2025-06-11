@@ -191,6 +191,7 @@ const setupSocket = (server) => {
       if (socket.userType === "agent") {
         const { agentId: newAgentId, agentName: newAgentName } =
           await getAvailableAgent();
+        console.log(newAgentId);
         if (newAgentId) {
           // Fetch all old messages
           const oldMessages = await ChatMessages.findAll({
@@ -222,11 +223,15 @@ const setupSocket = (server) => {
             });
           }
         } else {
+          console.log("no agent her");
+          console.log(chat_id);
           // No agent available, set status to pending
           await ChatConversations.update(
             { status: "waiting", updated_at: new Date() },
             { where: { id: chat_id } }
           );
+          let x = await ChatConversations.findOne({ where: { id: chat_id } });
+          console.log(x);
           console.log(`No available agent, chat ${chat_id} set to pending`);
         }
       }
@@ -348,7 +353,7 @@ const setupSocket = (server) => {
           include: [
             {
               model: ChatConversations,
-              where: { status: { [Op.in]: ["waiting", "pending"] } },
+              where: { status: { [Op.in]: ["waiting", "active"] } },
               as: "conversation",
               required: true,
             },
