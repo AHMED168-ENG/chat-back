@@ -224,7 +224,7 @@ const setupSocket = (server) => {
         } else {
           // No agent available, set status to pending
           await ChatConversations.update(
-            { status: "pending", updated_at: new Date() },
+            { status: "waiting", updated_at: new Date() },
             { where: { id: chat_id } }
           );
           console.log(`No available agent, chat ${chat_id} set to pending`);
