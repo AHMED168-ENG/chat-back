@@ -32,8 +32,8 @@ const setupSocket = (server) => {
     process.env.SOCKETPORT
   );
 
-  io.on("connection", (socket) => {
-    ChatQueue.destroy();
+  io.on("connection", async (socket) => {
+    await ChatQueue.destroy({ where: {} });
     console.log("user connect" + socket.id);
     socket.on("register_agent", async ({ agentId, agentName }) => {
       try {
