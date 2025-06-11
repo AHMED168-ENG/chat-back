@@ -15,7 +15,7 @@ let data = {};
 
 data.startConversation = async (req, res) => {
   try {
-    const { userId, subject, priority = 1 } = req.body;
+    const { userId, subject, priority = 1, oldChat } = req.body;
     const lang = req.headers.lang || "en";
 
     const existingConversation = await ChatConversations.findOne({
@@ -101,6 +101,108 @@ data.startConversation = async (req, res) => {
 };
 
 // إرسال رسالة
+
+// data.startConversation = async (req, res) => {
+//   try {
+//     const { userId, subject, priority = 1, oldChat } = req.body;
+//     const lang = req.headers.lang || "en";
+
+//     const existingConversation = await ChatConversations.findOne({
+//       where: {
+//         customer_id: userId,
+//         status: { [Op.in]: ["waiting", "active"] },
+//       },
+//     });
+
+//     if (existingConversation) {
+//       await ChatConversations.update(
+//         { status: "closed", closed_at: new Date(), updated_at: new Date() },
+//         { where: { id: existingConversation.id } }
+//       );
+//     }
+
+//     const { agentId, agentName } = await getAvailableAgent();
+//     const conversationData = {
+//       customer_id: userId,
+//       subject: subject || language[lang].chat.default_subject,
+//       priority,
+//       status: agentId ? "active" : "waiting",
+//       created_at: new Date(),
+//       updated_at: new Date(),
+//     };
+
+//     if (agentId) {
+//       conversationData.crm_agent_id = agentId;
+//     } else {
+//       const queueCount = await ChatQueue.count();
+//       conversationData.queue_position = queueCount + 1;
+//     }
+
+//     const conversation = await ChatConversations.create(conversationData);
+
+//     // Handle old chat messages if oldChat is provided
+//     let oldMessages = [];
+//     if (oldChat) {
+//       oldMessages = await ChatMessages.findAll({
+//         where: { conversation_id: oldChat },
+//         attributes: ["id", "message", "created_at", "sender"], // Adjust attributes as needed
+//       });
+
+//       // Copy old messages to new conversation
+//       if (oldMessages.length > 0) {
+//         const newMessages = oldMessages.map((msg) => ({
+//           conversation_id: conversation.id,
+//           message: msg.message,
+//           sender: msg.sender,
+//           created_at: msg.created_at,
+//           updated_at: new Date(),
+//         }));
+//         await ChatMessages.bulkCreate(newMessages);
+//       }
+//     }
+
+//     if (!agentId) {
+//       await ChatQueue.create({
+//         customer_id: userId,
+//         conversation_id: conversation.id,
+//         position: conversation.queue_position,
+//         created_at: new Date(),
+//       });
+//     } else {
+//       // Send notification and old messages to agent
+//       const agent = await OnlineAgents.findOne({
+//         where: { agent_id: agentId },
+//       });
+
+//       if (agent && agent.socket_id) {
+//         global.io.to(agent.socket_id).emit("agent_assigned", {
+//           conversation_id: conversation.id,
+//           agent_id: agentId,
+//           agent_name: agentName,
+//           old_messages: oldMessages, // Send old messages to agent
+//         });
+//       }
+//     }
+
+//     res.status(200).json({
+//       ack: 1,
+//       msg: language[lang].chat.conversation_created,
+//       conversation,
+//       queue_position: conversation.queue_position || null,
+//       estimated_wait_time: conversation.queue_position
+//         ? conversation.queue_position * 5
+//         : 0,
+//     });
+//   } catch (e) {
+//     console.error("Error in startConversation:", e);
+//     res.status(400).json({
+//       ack: 0,
+//       msg: language[lang].chat.error,
+//       error: e.message,
+//     });
+//   }
+// };
+
 data.sendMessage = async (req, res) => {
   try {
     const lang = req.headers.lang || "en";

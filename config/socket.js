@@ -151,6 +151,26 @@ const setupSocket = (server) => {
     });
 
     // مغادرة غرفة محادثة
+    // socket.on("leave_chat", async ({ chat_id }) => {
+    //   const roomId = `conversation_${chat_id}`;
+    //   socket.to(roomId).emit("user_left", {
+    //     user_id: socket.userId,
+    //     user_type: socket.userType,
+    //     chat_id: chat_id,
+    //   });
+    //   socket.leave(roomId);
+    //   console.log(`User ${socket.userId} left chat ${chat_id}`);
+    //   await ChatConversations.update(
+    //     { status: "closed", closed_at: new Date(), updated_at: new Date() },
+    //     { where: { id: chat_id } }
+    //   );
+    //   global.io.to(agent.socket_id).emit("agent_assigned", {
+    //     conversation_id: conversation.id,
+    //     agent_id: agentId,
+    //     agent_name: agentName,
+    //   });
+    // });
+
     socket.on("leave_chat", async ({ chat_id }) => {
       const roomId = `conversation_${chat_id}`;
       socket.to(roomId).emit("user_left", {
@@ -160,10 +180,51 @@ const setupSocket = (server) => {
       });
       socket.leave(roomId);
       console.log(`User ${socket.userId} left chat ${chat_id}`);
+
+      // Update conversation status to closed
       await ChatConversations.update(
         { status: "closed", closed_at: new Date(), updated_at: new Date() },
         { where: { id: chat_id } }
       );
+
+      // Check if the leaver is an agent
+      if (socket.userType === "agent") {
+        const { agentId: newAgentId, agentName: newAgentName } =
+          await getAvailableAgent();
+        if (newAgentId) {
+          // Fetch all old messages
+          const oldMessages = await ChatMessages.findAll({
+            where: { conversation_id: chat_id },
+            attributes: ["id", "message", "created_at", "sender"], // Adjust attributes as needed
+          });
+
+          // Reopen or update conversation with new agent
+          await ChatConversations.update(
+            {
+              status: "active",
+              crm_agent_id: newAgentId,
+              updated_at: new Date(),
+            },
+            { where: { id: chat_id } }
+          );
+
+          // Find the new agent socket
+          const newAgent = await OnlineAgents.findOne({
+            where: { agent_id: newAgentId },
+          });
+
+          if (newAgent && newAgent.socket_id) {
+            global.io.to(newAgent.socket_id).emit("agent_assigned", {
+              conversation_id: chat_id,
+              agent_id: newAgentId,
+              agent_name: newAgentName,
+              old_messages: oldMessages,
+            });
+          }
+        } else {
+          console.log(`No available agent to reassign for chat ${chat_id}`);
+        }
+      }
     });
 
     // إرسال رسالة في المحادثة
