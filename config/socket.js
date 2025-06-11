@@ -186,7 +186,7 @@ const setupSocket = (server) => {
       await ChatQueue.destroy({
         where: { conversation_id: chat_id },
       });
-      if (!conversation.status == "closed") return;
+      if (conversation.status == "closed") return;
 
       // Update conversation status based on user type
       await ChatConversations.update(
@@ -431,7 +431,7 @@ const setupSocket = (server) => {
       } catch (error) {
         console.error("Error in queue check:", error.message);
       }
-    }, 20000);
+    }, 10000);
 
     // setInterval(async () => {
     //   try {
