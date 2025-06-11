@@ -190,7 +190,7 @@ const setupSocket = (server) => {
         { where: { id: chat_id } }
       );
       console.log("*".repeat(20));
-      console.log(socket);
+      console.log(socket.userType);
       console.log("*".repeat(20));
       if (socket.userType === "agent") {
         const { agentId, agentName } = await getAvailableAgent();
