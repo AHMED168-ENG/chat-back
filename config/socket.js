@@ -226,7 +226,7 @@ const setupSocket = (server) => {
           console.log(chat_id);
           // No agent available, set status to pending
           await ChatConversations.update(
-            { status: "active", updated_at: new Date() },
+            { status: "waiting", updated_at: new Date() },
             { where: { id: chat_id } }
           );
           let x = await ChatConversations.findOne({ where: { id: chat_id } });
@@ -252,7 +252,7 @@ const setupSocket = (server) => {
           const conversation = await ChatConversations.findOne({
             where: {
               id: chat_id,
-              status: { [Op.in]: ["waiting", "active"] },
+              status: "active",
               // [socket.userType === "customer" ? "customer_id" : "crm_agent_id"]:
               //   socket.userId,
             },
@@ -352,7 +352,7 @@ const setupSocket = (server) => {
           include: [
             {
               model: ChatConversations,
-              where: { status: "active" },
+              where: { status: "waiting" },
               as: "conversation",
               required: true,
             },
@@ -427,6 +427,81 @@ const setupSocket = (server) => {
         console.error("Error in queue check:", error.message);
       }
     }, 20000);
+
+    // setInterval(async () => {
+    //   try {
+    //     // جلب أول محادثة في الطابور
+    //     const queuedConversation = await ChatQueue.findOne({
+    //       include: [
+    //         {
+    //           model: ChatConversations,
+    //           where: { status: "waiting" },
+    //           as: "conversation",
+    //           required: true,
+    //         },
+    //       ],
+    //       order: [["created_at", "ASC"]],
+    //     });
+
+    //     if (!queuedConversation) {
+    //       console.log("No queued conversations found.");
+    //       return;
+    //     }
+
+    //     const conversation = queuedConversation.conversation;
+    //     if (!conversation) {
+    //       console.log("No queued conversations found.");
+    //       return;
+    //     }
+    //     // جلب وكيل متاح من الـ API الخارجية
+    //     const { agentId, agentName } = await getAvailableAgent();
+
+    //     if (!agentId) {
+    //       console.log("No available agent found.");
+    //       return;
+    //     }
+
+    //     // تحديث المحادثة بالوكيل
+    //     await ChatConversations.update(
+    //       {
+    //         crm_agent_id: agentId,
+    //         status: "active",
+    //         updated_at: new Date(),
+    //       },
+    //       { where: { id: conversation.id } }
+    //     );
+
+    //     // حذف المحادثة من الطابور
+    //     await ChatQueue.destroy({
+    //       where: { conversation_id: conversation.id },
+    //     });
+
+    //     // جلب socket_id بتاع الوكيل
+    //     const agent = await OnlineAgents.findOne({
+    //       where: { agent_id: agentId },
+    //     });
+    //     if (agent && agent.socket_id) {
+    //       io.to(agent.socket_id).emit("agent_assigned", {
+    //         conversation_id: conversation.id,
+    //         agent_id: agentId,
+    //         agent_name: agentName,
+    //       });
+    //     }
+
+    //     // إشعار العميل في الـ room
+    //     io.to(`conversation_${conversation.id}`).emit("agent_assigned", {
+    //       conversation_id: conversation.id,
+    //       agent_id: agentId,
+    //       agent_name: agentName,
+    //     });
+
+    //     console.log(
+    //       `Conversation ${conversation.id} assigned to agent ${agentId}`
+    //     );
+    //   } catch (error) {
+    //     console.error("Error in queue check:", error.message);
+    //   }
+    // }, 20000);
   });
 
   global.io = io;
