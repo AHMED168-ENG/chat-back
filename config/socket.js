@@ -186,13 +186,12 @@ const setupSocket = (server) => {
         { status: "closed", closed_at: new Date(), updated_at: new Date() },
         { where: { id: chat_id } }
       );
-      console.log(socket);
+      console.log(await getAvailableAgent());
       // Check if the leaver is an agent
       if (socket.userType === "agent") {
-        const { agentId: newAgentId, agentName: newAgentName } =
-          await getAvailableAgent();
-        console.log(newAgentId);
-        if (newAgentId) {
+        const { agentId, agentName } = await getAvailableAgent();
+        console.log(agentId);
+        if (agentId) {
           // Fetch all old messages
           const oldMessages = await ChatMessages.findAll({
             where: { conversation_id: chat_id },
@@ -203,7 +202,7 @@ const setupSocket = (server) => {
           await ChatConversations.update(
             {
               status: "active",
-              crm_agent_id: newAgentId,
+              crm_agent_id: agentId,
               updated_at: new Date(),
             },
             { where: { id: chat_id } }
@@ -211,14 +210,14 @@ const setupSocket = (server) => {
 
           // Find the new agent socket
           const newAgent = await OnlineAgents.findOne({
-            where: { agent_id: newAgentId },
+            where: { agent_id: agentId },
           });
 
           if (newAgent && newAgent.socket_id) {
             global.io.to(newAgent.socket_id).emit("agent_assigned", {
               conversation_id: chat_id,
-              agent_id: newAgentId,
-              agent_name: newAgentName,
+              agent_id: agentId,
+              agent_name: agentName,
               old_messages: oldMessages,
             });
           }
