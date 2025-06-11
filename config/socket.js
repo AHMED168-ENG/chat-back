@@ -181,13 +181,16 @@ const setupSocket = (server) => {
       socket.leave(roomId);
       console.log(`User ${socket.userId} left chat ${chat_id}`);
 
+      const conversation = await ChatConversations.findOne({
+        where: { id: chat_id },
+      });
+
       // Update conversation status based on user type
       await ChatConversations.update(
         { status: "closed", closed_at: new Date(), updated_at: new Date() },
         { where: { id: chat_id } }
       );
-      console.log(await getAvailableAgent());
-      // Check if the leaver is an agent
+
       if (socket.userType === "agent") {
         const { agentId, agentName } = await getAvailableAgent();
         console.log(agentId);
@@ -222,8 +225,14 @@ const setupSocket = (server) => {
             });
           }
         } else {
-          console.log("no agent her");
-          console.log(chat_id);
+          const queueCount = await ChatQueue.count();
+
+          await ChatQueue.create({
+            customer_id: conversation.customer_id,
+            conversation_id: chat_id,
+            position: queueCount + 1,
+            created_at: new Date(),
+          });
           // No agent available, set status to pending
           await ChatConversations.update(
             { status: "waiting", updated_at: new Date() },
@@ -431,17 +440,17 @@ const setupSocket = (server) => {
     // setInterval(async () => {
     //   try {
     //     // جلب أول محادثة في الطابور
-    //     const queuedConversation = await ChatQueue.findOne({
-    //       include: [
-    //         {
-    //           model: ChatConversations,
-    //           where: { status: "waiting" },
-    //           as: "conversation",
-    //           required: true,
-    //         },
-    //       ],
-    //       order: [["created_at", "ASC"]],
-    //     });
+    // const queuedConversation = await ChatQueue.findOne({
+    //   include: [
+    //     {
+    //       model: ChatConversations,
+    //       where: { status: "waiting" },
+    //       as: "conversation",
+    //       required: true,
+    //     },
+    //   ],
+    //   order: [["created_at", "ASC"]],
+    // });
 
     //     if (!queuedConversation) {
     //       console.log("No queued conversations found.");
