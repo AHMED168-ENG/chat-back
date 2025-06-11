@@ -156,7 +156,7 @@ const setupSocket = (server) => {
       socket.to(roomId).emit("user_left", {
         user_id: socket.userId,
         user_type: socket.userType,
-        chat_id: socket.chat_id,
+        chat_id: chat_id,
       });
       socket.leave(roomId);
       console.log(`User ${socket.userId} left chat ${chat_id}`);
