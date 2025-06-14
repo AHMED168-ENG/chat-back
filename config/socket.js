@@ -136,11 +136,6 @@ const setupSocket = (server) => {
             conversation_id: conversation.id,
             agent_id: userId,
           });
-          // io.to(`conversation_${chat_id}`).emit("agent_assigned", {
-          //   conversation_id: chat_id,
-          //   agent_id: userId,
-          //   agent_name: "وكيل", // استخدام اسم الوكيل من OnlineAgents أو قيمة افتراضية
-          // });
         }
 
         socket.emit("chat_joined", { chat_id, userId, userType });
@@ -461,11 +456,11 @@ const setupSocket = (server) => {
         }
 
         // إشعار العميل في الـ room
-        io.to(`conversation_${conversation.id}`).emit("agent_assigned", {
-          conversation_id: conversation.id,
-          agent_id: agentId,
-          agent_name: agentName,
-        });
+        // io.to(`conversation_${conversation.id}`).emit("agent_assigned", {
+        //   conversation_id: conversation.id,
+        //   agent_id: agentId,
+        //   agent_name: agentName,
+        // });
       } catch (error) {
         console.error("Error in queue check:", error.message);
       }
