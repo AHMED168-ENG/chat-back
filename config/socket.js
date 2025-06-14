@@ -245,6 +245,44 @@ const setupSocket = (server) => {
       }
     });
 
+    socket.on("reject_conversation", async ({ chat_id, agent_id }) => {
+      try {
+        // التحقق من وجود المحادثة
+        const conversation = await ChatConversations.findOne({
+          where: { id: chat_id, crm_agent_id: agent_id },
+        });
+
+        if (!conversation) {
+          console.log(`conversation not found ${chat_id}`);
+          return;
+        }
+
+        // تحديث حالة المحادثة إلى waiting وإزالة الوكيل
+        await ChatConversations.update(
+          {
+            status: "waiting",
+            crm_agent_id: null,
+            updated_at: new Date(),
+          },
+          { where: { id: chat_id } }
+        );
+
+        // إضافة المحادثة إلى الطابور مرة أخرى
+        const queueCount = await ChatQueue.count();
+        await ChatQueue.create({
+          customer_id: conversation.customer_id,
+          conversation_id: chat_id,
+          position: queueCount + 1,
+          created_at: new Date(),
+        });
+
+        console.log(`Agent ${agent_id} rejected conversation ${chat_id}`);
+      } catch (error) {
+        console.error("Error in reject_conversation:", error);
+        socket.emit("error", { msg: "خطأ أثناء رفض المحادثة" });
+      }
+    });
+
     // إرسال رسالة في المحادثة
     socket.on(
       "send_chat_message",
@@ -368,7 +406,7 @@ const setupSocket = (server) => {
           ],
           order: [["created_at", "ASC"]],
         });
-        console.log(queuedConversation);
+
         if (!queuedConversation) {
           console.log("No queued or pending conversations found.");
           return;
