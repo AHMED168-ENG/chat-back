@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\Projects\\Companies\\Luminar\\Zaky's Code\\chat-back\\logs\\.67427bfb7cf82f900537846bcee2e854d3cf4af8-audit.json",
+    "files": [
+        {
+            "date": 1750170162726,
+            "name": "D:\\Projects\\Companies\\Luminar\\Zaky's Code\\chat-back\\logs\\error-2025-06-17.log",
+            "hash": "059edcda3c82a5b8fbf3444d7c498c353c3c8e07a44d30cb6be12027de0d55bf"
+        }
+    ],
+    "hashType": "sha256"
+}

@@ -7,7 +7,8 @@ const authRoutes = require("./routes/authRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const questionsRoutes = require("./routes/questions");
 const chatgptRoutes = require("./routes/chatgpt");
-
+const morgan = require('morgan')
+morgan('tiny')
 require("dotenv").config();
 
 const app = express();
@@ -62,10 +63,13 @@ app.use("/v1/auth", authRoutes);
 app.use("/v1/chat", chatRoutes);
 app.use("/v1/questions", questionsRoutes);
 app.use("/v1/chatgpt", chatgptRoutes);
+// Import Workflow routes
+require('./src/routes/index')(app)
+
 // Socket.IO
 
 let socketServer;
-const port = process.env.SOCKET_PORT || 3020;
+const socket_port = process.env.SOCKET_PORT || 4500;
 socketServer = http.createServer(app);
 
 const socketIo = setupSocket(socketServer);
@@ -80,12 +84,24 @@ process.on("unhandledRejection", (error) => {
   console.error("❌ خطأ في Promise:", error);
 });
 
-socketServer.listen(port, () => {
-  console.log("🚀 server sockit start " + port);
+socketServer.listen(socket_port, () => {
+  console.log("🚀 server sockit start " + socket_port);
 });
 
-// Sync database and start server
-const PORT = process.env.PORT || 3000;
+const nodeEnv = process.env.NODE_ENV || "development";
+let PORT;
+switch (nodeEnv) {
+  case "development":
+    PORT = process.env.DEV_PORT || 3000;
+    break;
+  case "production":
+    PORT = process.env.PORT || 3000;
+    break;
+  default:
+    PORT = 3000;
+    break;
+}
+
 sequelize
   .sync({ force: false })
   .then(() => {
