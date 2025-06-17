@@ -1,31 +1,31 @@
 const express = require("express");
 const router = express.Router();
 const pendingQuestionsHandler = require("../controllers/pendingQuestions");
-const validate = require("../middleware/validate");
 const {
   getPendingQuestionsSchema,
   answerPendingQuestionSchema,
   deletePendingQuestionSchema,
 } = require("../validation/pendingQuestionsValidation");
+const validateJoi = require("../middleware/validationJoi");
 
 router.get(
   "/",
-  validate(getPendingQuestionsSchema),
+  validateJoi(getPendingQuestionsSchema),
   pendingQuestionsHandler.getAllPendingQuestions
 );
 router.get(
   "/:id",
-  validate(deletePendingQuestionSchema),
+  validateJoi(deletePendingQuestionSchema, "params"),
   pendingQuestionsHandler.getPendingQuestion
 );
 router.post(
   "/",
-  validate(answerPendingQuestionSchema),
+  validateJoi(answerPendingQuestionSchema),
   pendingQuestionsHandler.answerPendingQuestion
 );
 router.delete(
   "/:id",
-  validate(deletePendingQuestionSchema),
+  validateJoi(deletePendingQuestionSchema, "params"),
   pendingQuestionsHandler.deletePendingQuestion
 );
 

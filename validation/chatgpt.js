@@ -11,9 +11,11 @@ const askQuestionSchema = (lang = "en") =>
       .email()
       .required()
       .messages({
-        "string.email": language[lang].chatgpt.invalid_email || "Invalid email",
+        "string.email":
+          language[lang].questions.chatgpt.invalid_email || "Invalid email",
         "any.required":
-          language[lang].chatgpt.email_required || "Email is required",
+          language[lang].questions.chatgpt.email_required ||
+          "Email is required",
       }),
   });
 

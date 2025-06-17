@@ -1,6 +1,6 @@
 const sgMail = require("@sendgrid/mail");
 require("dotenv").config();
-const { answerEmailTemplate } = require("./templates/answerEmailTemplate");
+const { answerEmailTemplate } = require("../templates/answerEmailTemplate");
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 

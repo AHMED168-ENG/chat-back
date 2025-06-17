@@ -35,8 +35,6 @@
   "chatgpt": {
     "question_required": "Question is required",
     "question_invalid": "Invalid question",
-    "error": "Error processing your request",
-    "invalid_email": "Invalid email",
-    "email_required": "Email is required"
+    "error": "Error processing your request"
   }
 }

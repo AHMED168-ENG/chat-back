@@ -75,7 +75,15 @@ data.getPendingQuestion = async (req, res) => {
 
 data.answerPendingQuestion = async (req, res) => {
   try {
-    const { id, answer, answer_arabic, keywords_en, keywords_ar } = req.body;
+    const {
+      id,
+      answer,
+      answer_arabic,
+      keywords_en,
+      keywords_ar,
+      question,
+      question_arabic,
+    } = req.body;
     const lang = req.headers.lang || "en";
 
     const pendingQuestion = await PendingQuestionsModel.findByPk(id);
@@ -85,16 +93,16 @@ data.answerPendingQuestion = async (req, res) => {
         msg: language[lang].questions.pending_question_not_found,
       });
     }
-
+    console.log(pendingQuestion);
     await QuestionsModel.create(
       {
         keywords_en: keywords_en || "",
         keywords_ar: keywords_ar || "",
         locales: [
-          { locale: "en", question: pendingQuestion.questionEn, answer },
+          { locale: "en", question: question, answer },
           {
             locale: "ar",
-            question: pendingQuestion.questionAr,
+            question: question_arabic,
             answer: answer_arabic,
           },
         ],
@@ -108,9 +116,7 @@ data.answerPendingQuestion = async (req, res) => {
       await sendAnswerEmail({
         to: pendingQuestion.userEmail,
         question:
-          pendingQuestion.originalLang === "en"
-            ? pendingQuestion.questionEn
-            : pendingQuestion.questionAr,
+          pendingQuestion.originalLang === "en" ? question : question_arabic,
         answer: pendingQuestion.originalLang === "en" ? answer : answer_arabic,
         lang: pendingQuestion.originalLang,
       });

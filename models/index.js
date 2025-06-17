@@ -6,6 +6,7 @@ const User = require("./User");
 const QuestionsModel = require("./questions.model");
 const QuestionsLocalesModel = require("./questions_locales.model");
 const PendingQuestionsModel = require("./PendingQuestions");
+const TicketsModel = require("./TicketsModel");
 
 ChatConversations.hasMany(ChatMessages, {
   foreignKey: "conversation_id",
@@ -42,4 +43,5 @@ module.exports = {
   QuestionsModel,
   QuestionsLocalesModel,
   PendingQuestionsModel,
+  TicketsModel,
 };
