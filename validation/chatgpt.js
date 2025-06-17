@@ -7,6 +7,16 @@ const askQuestionSchema = (lang = "en") =>
       "string.base": language[lang].questions.chatgpt.question_invalid,
       "any.required": language[lang].questions.chatgpt.question_required,
     }),
+    userEmail: Joi.string()
+      .email()
+      .required()
+      .messages({
+        "string.email":
+          language[lang].questions.chatgpt.invalid_email || "Invalid email",
+        "any.required":
+          language[lang].questions.chatgpt.email_required ||
+          "Email is required",
+      }),
   });
 
 module.exports = { askQuestionSchema };

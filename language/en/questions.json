@@ -24,7 +24,13 @@
     "limit_min": "Limit must be at least 1",
     "limit_max": "Limit must not exceed 100",
     "invalid_sort_field": "Invalid sort field",
-    "invalid_sort_order": "Invalid sort order"
+    "invalid_sort_order": "Invalid sort order",
+    "no_answer_found": "Your question has been recorded and will be answered soon",
+    "email_subject": "Your Question Has Been Answered",
+    "email_failed": "Failed to send email",
+    "pending_question_not_found": "Pending question not found",
+    "invalid_email": "Invalid email",
+    "email_required": "Email is required"
   },
   "chatgpt": {
     "question_required": "Question is required",

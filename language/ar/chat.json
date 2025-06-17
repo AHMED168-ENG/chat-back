@@ -25,5 +25,5 @@
   "error": "حدث خطأ",
   "default_subject": "طلب دعم فني",
   "invalid_user_id": "معرف المستخدم غير صحيح",
-      "user_id_required": "معرف المستخدم مطلوب"
+  "user_id_required": "معرف المستخدم مطلوب"
 }
