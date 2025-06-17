@@ -9,6 +9,7 @@
     "migrate": "sequelize db:migrate"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.5",
     "axios": "^1.9.0",
     "bcrypt": "^6.0.0",
     "chat-system": "file:",

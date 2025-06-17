@@ -7,6 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const questionsRoutes = require("./routes/questions");
 const chatgptRoutes = require("./routes/chatgpt");
+const pendingQuestionRoutes = require("./routes/pendingQuestions");
 
 require("dotenv").config();
 
@@ -62,6 +63,7 @@ app.use("/v1/auth", authRoutes);
 app.use("/v1/chat", chatRoutes);
 app.use("/v1/questions", questionsRoutes);
 app.use("/v1/chatgpt", chatgptRoutes);
+app.use("/v1/pending-question", pendingQuestionRoutes);
 // Socket.IO
 
 let socketServer;

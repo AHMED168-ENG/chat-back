@@ -129,7 +129,6 @@ data.addQuestion = async (req, res) => {
         { locale: "ar", question: question_arabic, answer: answer_arabic },
       ],
     };
-    console.log(inputData);
 
     await QuestionsModel.create(inputData, {
       include: [{ model: QuestionsLocalesModel, as: "locales" }],
