@@ -1,22 +1,26 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('workflow_configs', {
+    await queryInterface.createTable('workflowSessionHistories', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUID
       },
-      greeting: {
-        type: Sequelize.STRING
+      session_id: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
-      greetingAr: {
+      selectedOptions: {
+        type: Sequelize.JSON
+      },
+      lang: {
         type: Sequelize.STRING
       },
       deletedAt: {
-        type: Sequelize.DATE,
+        allowNull: true,
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -25,11 +29,15 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      
+      }
+    },
+    {
+      timestamps: true,
+      paranoid: true, // Enable soft deletes
+      tableName: 'workflowSessionHistories' // Specify the table name
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('workflow_configs');
+    await queryInterface.dropTable('workflowSessionHistories');
   }
 };

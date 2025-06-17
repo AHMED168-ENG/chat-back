@@ -4,6 +4,8 @@ const defineWorkflowConfig = require('../../../models/workflow_config');
 const WorkflowConfig = defineWorkflowConfig(sequelize, DataTypes);
 const defineWorkflowNodes = require('../../../models/workflownodes');
 const workflowNodes = defineWorkflowNodes(sequelize,DataTypes); 
+const defineSessionHistory = require('../../../models/workflowsessionhistory.js');
+const workflowSessionModel = defineSessionHistory(sequelize,DataTypes); 
 
 
 const getGreetingMessage = async (lang) => {
@@ -29,8 +31,32 @@ const getRoots = async (lang = "en") => {
     });
     return nodes;
 };
-
-    
+const getOptionDetails = async (optionId, lang = "en") => {
+    // Default attributes
+    const defaultAttributes = [
+        "id", "textType", "parentId", "optionType", "icon", "notes"
+    ];
+    if (lang === "ar") {
+        defaultAttributes.push("nameAr", "guidingTextAr", "guidingImagesAr");
+    } else {
+        defaultAttributes.push("name", "guidingText", "guidingImages");
+    }
+    // Fetch the option details by ID
+    const optionDetails = await workflowNodes.findOne({
+        where: { id: optionId },
+        attributes: defaultAttributes
+    });
+    return optionDetails;
+}
+const saveSessionHistory = async (sessionId, selectedOptions, lang) => {
+    // Create a new session history entry
+    await workflowSessionModel.create({
+        session_id: sessionId,
+        selectedOptions: selectedOptions,
+        lang: lang
+    });
+    return true;
+};
 const parentOffSprings = async (parentId, lang = "en") => {
     // Default attributes
     const defaultAttributes = [
@@ -53,5 +79,7 @@ const parentOffSprings = async (parentId, lang = "en") => {
 module.exports = {
     getRoots,
     parentOffSprings,
-    getGreetingMessage
+    getGreetingMessage,
+    getOptionDetails,
+    saveSessionHistory
 };
