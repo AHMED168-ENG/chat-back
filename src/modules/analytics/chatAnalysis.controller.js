@@ -7,7 +7,7 @@ const workflowSessionModel = defineSessionHistory(sequelize,DataTypes);
 const ChatConversations= require('../../../models/ChatConversations.js');
 const getAnalysis = catchError(async (req, res) => {
     const { from,to } = req.query;
-    console.log(from,to)
+
     // Get chatbot counts per month
     const chatbotRaw = await workflowSessionModel.findAll({
         attributes: [

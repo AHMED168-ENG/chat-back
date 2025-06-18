@@ -9,14 +9,15 @@ const Authenticate=catchError(async (req,res,next)=>{
         token = authHeader.split(" ")[1]||req.headers?.token;
     }
     if (token && typeof token === "string" && token.trim() && token !== "null" && token !== "undefined") {
-        const env_secret=process.env.CRM_JWT_SECRET;
-        const secret = Buffer.from(env_secret,'base64');
-        const decoded = jwt.verify(token,secret ,{algorithms: ['HS512']});
-        const { userId } = decoded;
-        const user = await users.findByPk(userId);
-        if (!user) return next(new AppError("User not found", 401));
-        req.user = user;
-        return next();
+        const env_secret = process.env.CRM_JWT_SECRET;
+        const secret = Buffer.from(env_secret, 'base64');
+        try {
+            const decode=jwt.verify(token, secret, { algorithms: ['HS512'] });
+            console.log(decode)
+            return next();
+        } catch (err) {
+            return next(new AppError("Unauthorized", 401));
+        }
     }
     return next(new AppError("Unauthorized", 401));
 });
