@@ -11,16 +11,16 @@ const CustomersModel = sequelize.define(
       allowNull: false,
     },
     name: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     phone: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING(50),
       allowNull: false,
       unique: true,
     },
     email: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING(100),
       allowNull: false,
       unique: true,
     },
