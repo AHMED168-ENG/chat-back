@@ -13,7 +13,7 @@ const Authenticate=catchError(async (req,res,next)=>{
         const secret = Buffer.from(env_secret, 'base64');
         try {
             const decode=jwt.verify(token, secret, { algorithms: ['HS512'] });
-            console.log(decode)
+            // console.log(decode)
             return next();
         } catch (err) {
             return next(new AppError("Unauthorized", 401));
