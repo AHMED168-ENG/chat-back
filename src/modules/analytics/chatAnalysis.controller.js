@@ -5,6 +5,10 @@ const catchError = require("../../../utils/catchError.js");
 const defineSessionHistory = require('../../../models/workflowsessionhistory.js');
 const workflowSessionModel = defineSessionHistory(sequelize,DataTypes); 
 const ChatConversations= require('../../../models/ChatConversations.js');
+const defineAiSession= require('../../../models/aicountpersession.js');
+const aicountpersession = defineAiSession(sequelize,DataTypes); 
+
+
 const getAnalysis = catchError(async (req, res) => {
     const { from,to } = req.query;
 
@@ -38,7 +42,21 @@ const getAnalysis = catchError(async (req, res) => {
         order: [[sequelize.fn('DATE_FORMAT', sequelize.col('created_at'), '%Y-%m'), 'DESC']],
         raw: true,
     });
-
+    const gptRaw = await aicountpersession.findAll({
+        attributes: [
+            [sequelize.fn('DATE_FORMAT', sequelize.col('createdAt'), '%Y-%m'), 'month'],
+            [sequelize.fn('COUNT', sequelize.col('id')), 'ai'],
+        ],
+        where: {
+            createdAt: {
+                [Op.between]: [new Date(from), new Date(to)],
+            },
+            entered: true
+        },
+        group: [sequelize.fn('DATE_FORMAT', sequelize.col('createdAt'), '%Y-%m')],
+        order: [[sequelize.fn('DATE_FORMAT', sequelize.col('createdAt'), '%Y-%m'), 'DESC']],
+        raw: true
+    })
     function getMonthsBetween(start, end) {
         const result = [];
         const date = new Date(start.getFullYear(), start.getMonth(), 1);
@@ -54,22 +72,27 @@ const getAnalysis = catchError(async (req, res) => {
 
     const chatbotMap = Object.fromEntries(chatbotRaw.map(r => [r.month, Number(r.chatbot)]));
     const agentMap = Object.fromEntries(agentRaw.map(r => [r.month, Number(r.agent)]));
+    const aiMap = Object.fromEntries(agentRaw.map(r => [r.month, Number(r.agent)]));
 
     let totalChatbot = 0;
     let totalAgent = 0;
+    let totalAi = 0;
 
     const data = months.map(month => {
         const chatbot = chatbotMap[month] || 0;
         const agent = agentMap[month] || 0;
+        const ai = agentMap[month] || 0;
         totalChatbot += chatbot;
         totalAgent += agent;
-        return { month, chatbot, humanAgent:agent };
+        totalAi += ai;
+        return { month, chatbot, humanAgent:agent, ai:totalAi};
     });
 
     data.push({
         total: {
             chatbot: totalChatbot,
-            agent: totalAgent
+            agent: totalAgent,
+            ai: totalAi
         }
     });
     
