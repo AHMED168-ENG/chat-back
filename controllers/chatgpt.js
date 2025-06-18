@@ -76,7 +76,9 @@ data.askQuestion = async (req, res) => {
 
       // إضافة السؤال كتذكرة في TicketsModel
       try {
-        let customer = await CustomersModel.findOne({ email: userEmail });
+        let customer = await CustomersModel.findOne({
+          where: { email: userEmail },
+        });
         console.log(customer);
         TicketsModel.create({
           status: "open",
