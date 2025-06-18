@@ -5,6 +5,7 @@ const {
   QuestionsLocalesModel,
   TicketsModel,
   PendingQuestionsModel,
+  CustomersModel,
 } = require("../models/index.js");
 const { Op } = require("sequelize");
 const language = require("../language/index");
@@ -75,16 +76,17 @@ data.askQuestion = async (req, res) => {
 
       // إضافة السؤال كتذكرة في TicketsModel
       try {
+        let customer = await CustomersModel.findOne({ email: userEmail });
         TicketsModel.create({
           status: "open",
           subject: `Unanswered Question: ${question.substring(0, 50)}...`,
           description: `User Email: ${userEmail}\nQuestion (${lang}): ${question}`,
-          customer_id: null, // يمكن تحديثه لو في معرف العميل
-          assigned_to: null, // يمكن تعيينه لاحقًا
-          department_id: null, // يمكن تعيينه بناءً على نوع السؤال
-          category_id: null, // يمكن تعيينه لاحقًا
-          priority_id: null, // يمكن تعيينه لاحقًا
-          creator_id: null, // يمكن تعيينه لو في معرف المستخدم
+          customer_id: customer ? customer.id : null, // يمكن تحديثه لو في معرف العميل
+          assigned_to: null,
+          department_id: null,
+          category_id: null,
+          priority_id: null,
+          creator_id: null,
         });
       } catch (ticketError) {
         console.warn(
