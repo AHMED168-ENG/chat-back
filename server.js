@@ -88,13 +88,20 @@ socketServer.listen(port, () => {
 
 // Sync database and start server
 const PORT = process.env.PORT || 3000;
-sequelize
-  // .sync({ force: false })
-  .then(() => {
-    server.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => console.error("Database sync error:", err));
+
+if (process.env.NODE_ENV === "development") {
+  sequelize
+    .sync({ force: false })
+    .then(() => {
+      server.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+      });
+    })
+    .catch((err) => console.error("Database sync error:", err));
+} else {
+  server.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
 
 module.exports = app;
