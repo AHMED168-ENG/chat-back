@@ -89,7 +89,7 @@ socketServer.listen(port, () => {
 // Sync database and start server
 const PORT = process.env.PORT || 3000;
 sequelize
-  .sync({ force: false })
+  // .sync({ force: false })
   .then(() => {
     server.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
