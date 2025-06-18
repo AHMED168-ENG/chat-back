@@ -33,5 +33,11 @@ const init = async(io,socket)=> {
         const nodes=await parentOffSprings(option.id, lang)||[];
         socket.emit('options', { nodes });
     });
+    socket.on("disconnect", async () => {
+        const sessionData=socket.sessionData || {};
+        await saveSessionHistory(socket.id,sessionData.selectedOptions,lang);
+        socket.disconnect(true);
+        return;
+    })
 };
 module.exports = {init};
