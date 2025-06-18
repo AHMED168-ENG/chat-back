@@ -7,8 +7,8 @@ const authRoutes = require("./routes/authRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const questionsRoutes = require("./routes/questions");
 const chatgptRoutes = require("./routes/chatgpt");
-const morgan = require('morgan')
-morgan('tiny')
+const pendingQuestionRoutes = require("./routes/pendingQuestions");
+
 require("dotenv").config();
 
 const app = express();
@@ -63,13 +63,11 @@ app.use("/v1/auth", authRoutes);
 app.use("/v1/chat", chatRoutes);
 app.use("/v1/questions", questionsRoutes);
 app.use("/v1/chatgpt", chatgptRoutes);
-// Import Workflow routes
-require('./src/routes/index')(app)
-
+app.use("/v1/pending-question", pendingQuestionRoutes);
 // Socket.IO
 
 let socketServer;
-const socket_port = process.env.SOCKET_PORT || 4500;
+const port = process.env.SOCKET_PORT || 3020;
 socketServer = http.createServer(app);
 
 const socketIo = setupSocket(socketServer);
@@ -84,31 +82,26 @@ process.on("unhandledRejection", (error) => {
   console.error("❌ خطأ في Promise:", error);
 });
 
-socketServer.listen(socket_port, () => {
-  console.log("🚀 server sockit start " + socket_port);
+socketServer.listen(port, () => {
+  console.log("🚀 server sockit start " + port);
 });
 
-const nodeEnv = process.env.NODE_ENV || "development";
-let PORT;
-switch (nodeEnv) {
-  case "development":
-    PORT = process.env.DEV_PORT || 3000;
-    break;
-  case "production":
-    PORT = process.env.PORT || 3000;
-    break;
-  default:
-    PORT = 3000;
-    break;
-}
+// Sync database and start server
+const PORT = process.env.PORT || 3000;
 
-sequelize
-  .sync({ force: false })
-  .then(() => {
-    server.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => console.error("Database sync error:", err));
+if (process.env.NODE_ENV === "development") {
+  sequelize
+    .sync({ force: false })
+    .then(() => {
+      server.listen(PORT, () => {
+        console.log(Server running on http://localhost:${PORT});
+      });
+    })
+    .catch((err) => console.error("Database sync error:", err));
+} else {
+  server.listen(PORT, () => {
+    console.log(Server running on http://localhost:${PORT});
+  });
+}
 
 module.exports = app;
