@@ -43,19 +43,6 @@ const CustomersModel = sequelize.define(
   {
     tableName: "customers",
     timestamps: false, // لأننا بنتحكم في created_at يدويًا
-    indexes: [
-      {
-        unique: true,
-        fields: ["phone"],
-      },
-      {
-        unique: true,
-        fields: ["email"],
-      },
-      {
-        fields: ["creator_id"],
-      },
-    ],
   }
 );
 
