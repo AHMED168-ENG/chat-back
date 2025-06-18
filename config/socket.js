@@ -29,7 +29,7 @@ const setupSocket = (server) => {
 
   console.log(
     "✅ Socket.IO server initialized on port",
-    process.env.SOCKETPORT
+    process.env.SOCKET_PORT
   );
 
   io.on("connection", async (socket) => {

@@ -94,13 +94,13 @@ if (process.env.NODE_ENV === "development") {
     .sync({ force: false })
     .then(() => {
       server.listen(PORT, () => {
-        console.log(`Server running on http://localhost:${PORT}`);
+        console.log(Server running on http://localhost:${PORT});
       });
     })
     .catch((err) => console.error("Database sync error:", err));
 } else {
   server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(Server running on http://localhost:${PORT});
   });
 }
 
