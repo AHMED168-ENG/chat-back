@@ -34,11 +34,15 @@ module.exports = {
     });
 
     // إضافة حقل type عبر ALTER TABLE
-    await queryInterface.addColumn("customers", "type", {
+    // Check if the "type" column exists before adding
+    const table = await queryInterface.describeTable("customers");
+    if (!table.type) {
+      await queryInterface.addColumn("customers", "type", {
       type: DataTypes.ENUM("customer", "lead"),
       allowNull: false,
       defaultValue: "customer",
-    });
+      });
+    }
 
     // إضافة الفهارس
     await queryInterface.addIndex("customers", ["creator_id"]);
