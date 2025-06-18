@@ -20,7 +20,8 @@ const validation=(schema,fields=null)=>{
     const {error} = await schema.validate(filter, { abortEarly: false });
 
     if (error) {
-        // console.log(error.details);
+        console.log(error.details);
+        console.log(filter);
         let errMsg=[];
         error.details.forEach(element => {
             errMsg.push(element.message);
