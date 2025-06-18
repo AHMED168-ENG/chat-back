@@ -8,7 +8,7 @@ const chatRoutes = require("./routes/chatRoutes");
 const questionsRoutes = require("./routes/questions");
 const chatgptRoutes = require("./routes/chatgpt");
 const pendingQuestionRoutes = require("./routes/pendingQuestions");
-
+// const listEndpoints = require('express-list-endpoints');
 require("dotenv").config();
 
 const app = express();

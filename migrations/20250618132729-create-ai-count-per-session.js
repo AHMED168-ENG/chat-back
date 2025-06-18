@@ -1,22 +1,22 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('aiCountPerSessions', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       entered: {
         type: Sequelize.BOOLEAN
       },
-      createdAt: {
-        allowNull: false,
+      deletedAt: {
+        allowNull: true,
         type: Sequelize.DATE
       },
-      deletedAt: {
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
@@ -24,13 +24,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    },
-  {
+    }, {
       timestamps: true,
       paranoid: true, // Enable soft deletes
-      tableName: 'aiCountPerSessions' // Specify the table name
-  });
+      tableName: 'aiCountPerSessions'
+    });
   },
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('aiCountPerSessions');
   }
