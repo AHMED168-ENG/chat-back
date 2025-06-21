@@ -90,7 +90,11 @@ socketServer.listen(port, () => {
 const PORT = process.env.PORT || 3000;
 const morgan = require("morgan");
 app.use(morgan("dev"));
+const itemsRoute=require("./routes/itemsRoute.js");
+app.use("/v1/items", itemsRoute);
 require('./src/routes/index.js')(app)
+
+
 if (process.env.NODE_ENV === "development") {
   sequelize
     .sync({ force: false })
