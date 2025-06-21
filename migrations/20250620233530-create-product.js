@@ -37,7 +37,14 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       categoryId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Categories', // name of the target model
+          key: 'id' // key in the target model that we're referencing
+        },
+        allowNull: false,
+        onDelete: 'CASCADE', // optional, defines what happens on delete
+        onUpdate: 'CASCADE' // optional, defines what happens on update
       },
       createdAt: {
         allowNull: false,
