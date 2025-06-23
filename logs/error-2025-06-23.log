@@ -1,0 +1,2 @@
+2025-06-23T10:59:42.809Z error: TypeError: Cannot read properties of undefined (reading 'error')
+    at data.askQuestion (D:\Projects\Companies\Luminar\Zaky's Code\chat-back\controllers\chatgpt.js:134:55)

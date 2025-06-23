@@ -10,13 +10,13 @@ const {
 const { Op } = require("sequelize");
 const language = require("../language/index");
 // for product and category training
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/sequelizeDb.js');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/sequelizeDb.js");
 
-const defineModelCategory= require('../models/category');
-const Category = defineModelCategory(sequelize,DataTypes); 
-const defineModelProduct= require('../models/product');
-const Product = defineModelProduct(sequelize,DataTypes); 
+const defineModelCategory = require("../models/category");
+const Category = defineModelCategory(sequelize, DataTypes);
+const defineModelProduct = require("../models/product");
+const Product = defineModelProduct(sequelize, DataTypes);
 
 // Initialize OpenAI with API key
 const openai = new OpenAI({
@@ -39,7 +39,7 @@ data.askQuestion = async (req, res) => {
         },
       ],
     });
-    const products = await Product.findAll({})
+    const products = await Product.findAll({});
     // let context = `You are an assistant trained on the following questions and answers in "${lang}" language:\n`;
     // questions.forEach((q) => {
     //   context += `Question: ${q.locales[0].question}\nAnswer: ${
@@ -59,24 +59,27 @@ data.askQuestion = async (req, res) => {
     // //   }\nKeywords: ${lang === "en" ? q.keywords_en : q.keywords_ar}\n\n`;
     // // });
     let context = `
-      You are an AI assistant for a Qatari supermarket called Pality Express. The customer may speak in Arabic or English.
+      You are an assistant trained on the following questions and answers in "${lang}" language:\n
 
-      Your responsibilities:
       1. If the user asks about a dish, list its ingredients from your general knowledge.
-      2. Then, match those ingredients to the product list below and suggest products available at Pality Express.
-      3. If the user asks a predefined question, answer using the Q&A list only.
-      4. If you can't match the question to any FAQ or known dish, reply with exactly: "No relevant answer found."
-      5. Always respond in the same language the user uses.
+      2. Then, match those ingredients to the product list below and suggest products available with the product price at Balady Mart.
+      3. Always respond in the same language the user uses.`;
 
-      == FAQs ==
-      ${questions.map(q => `Q: ${q.locales[0].question}\nA: ${q.locales[0].answer}\n`).join("\n")}
+    questions.forEach((q) => {
+      context += `Question: ${q.locales[0].question}\nAnswer: ${q.locales[0].answer}\n`;
+    });
+    products.forEach((p) => {
+      context += `Product (EN): ${p.name_en}\n
+      Product (AR): ${p.name_ar}\n
+      Price (EN): ${p.price} QAR\n
+      Price (AR): ${p.price} ر.ق\n
+      Description (EN): ${p.description_en}\n
+      Description (AR): ${p.description_ar}`;
+    });
 
-      == Product Catalog ==
-      ${products.map(p => 
-        `Product (EN): ${p.name_en}\nProduct (AR): ${p.name_ar}\nDescription (EN): ${p.description_en}\nDescription (AR): ${p.description_ar}`
-      ).join("\n\n")}
-      `;
-    // context += `Based on the above, provide the closest answer to the following question: ${question}`;
+    context += `Based on the above, provide the closest answer to the following question: ${question} and see if question is a part of question or refer to eny question in example if question is 'what is node js' if i ask node or 'what is node' you should answer me you should see if question part of the supplier questions Even if there is a question that you are asking about one of the questions I gave you, you will get your answer back but You must take the answer from the table not from you and and do not change it. 
+     Please pay attention to this part. If no relevant answer is found in the provided data, respond with exactly "No relevant answer found."`;
+
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       store: true,
