@@ -40,36 +40,46 @@ data.askQuestion = async (req, res) => {
       ],
     });
     const products = await Product.findAll({});
-    // let context = `You are an assistant trained on the following questions and answers in "${lang}" language:\n`;
-    // questions.forEach((q) => {
-    //   context += `Question: ${q.locales[0].question}\nAnswer: ${
-    //     q.locales[0].answer
-    //   }\nKeywords: ${lang === "en" ? q.keywords_en : q.keywords_ar}\n\n`;
-    // });
-    // // context += `Based on the above, provide the closest answer to the following question: ${question}`;
+    /*old context
+    let context = `You are an assistant trained on the following questions and answers in "${lang}" language:\n`;
+    questions.forEach((q) => {
+      context += `Question: ${q.locales[0].question}\nAnswer: ${
+        q.locales[0].answer
+      }\nKeywords: ${lang === "en" ? q.keywords_en : q.keywords_ar}\n\n`;
+    });
+    context += `Based on the above, provide the closest answer to the following question: ${question}`;
 
-    // // context += `For the question "${question}", find the most relevant answer from the provided data. If the question contains any keywords (even partially matching) listed in the Keywords field, return the corresponding Answer exactly as it appears in the data. If no keywords match or the question is completely unrelated to the provided data, respond with exactly "No relevant answer found."`;
-    // context += `Based on the above, provide the closest answer to the following question: ${question} and see if question is a part of question . If no relevant answer is found in the provided data, respond with exactly "No relevant answer found."`;
+    context += `For the question "${question}", find the most relevant answer from the provided data. If the question contains any keywords (even partially matching) listed in the Keywords field, return the corresponding Answer exactly as it appears in the data. If no keywords match or the question is completely unrelated to the provided data, respond with exactly "No relevant answer found."`;
+    context += `Based on the above, provide the closest answer to the following question: ${question} and see if question is a part of question . If no relevant answer is found in the provided data, respond with exactly "No relevant answer found."`;
 
-    // // let context = `You are an assistant trained on the following questions and answers:\n in "${lang}" language.\n`;
+    let context = `You are an assistant trained on the following questions and answers:\n in "${lang}" language.\n`;
 
-    // // questions.forEach((q) => {
-    // //   context += `Question: ${q.locales[0].question}\nAnswer: ${
-    // //     q.locales[0].answer
-    // //   }\nKeywords: ${lang === "en" ? q.keywords_en : q.keywords_ar}\n\n`;
-    // // });
+    questions.forEach((q) => {
+      context += `Question: ${q.locales[0].question}\nAnswer: ${
+        q.locales[0].answer
+      }\nKeywords: ${lang === "en" ? q.keywords_en : q.keywords_ar}\n\n`;
+    });
+    */
+    
     let context = `
       You are an assistant trained on the following questions and answers in "${lang}" language:\n
-
       1. If the user asks about a dish, list its ingredients from your general knowledge.
       2. Then, match those ingredients to the product list below and suggest products available with the product price at Balady Mart.
-      3. Always respond in the same language the user uses.`;
+      3. After listing the products, ALWAYS include the matched product IDs in the following exact format at the END of your response:
+      prod_ids: [1, 2, 3]
+      (Use the actual matching product IDs from the list below. The ID list must be a valid JavaScript array with numbers and no quotes.)
+      4. Always respond in the same language the user uses.
+      5. If the user question matches or is similar to any of the questions below (even partially), return the exact answer from the dataset — do NOT generate a new answer.
+      6. If no relevant answer is found in either the questions or product list, respond with exactly: "No relevant answer found."
+`;
 
     questions.forEach((q) => {
       context += `Question: ${q.locales[0].question}\nAnswer: ${q.locales[0].answer}\n`;
     });
     products.forEach((p) => {
-      context += `Product (EN): ${p.name_en}\n
+      context += `
+      Product ID: ${p.id}\n
+      Product (EN): ${p.name_en}\n
       Product (AR): ${p.name_ar}\n
       Price (EN): ${p.price} QAR\n
       Price (AR): ${p.price} ر.ق\n
@@ -90,7 +100,7 @@ data.askQuestion = async (req, res) => {
       max_tokens: 300,
       temperature: 0.5,
     });
-    // console.log(response.choices[0].message);
+    // console.log(response.choices);
     const answer = response.choices[0].message.content.trim();
 
     if (answer === "No relevant answer found." || answer === "") {
