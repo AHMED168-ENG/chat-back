@@ -63,16 +63,23 @@ data.askQuestion = async (req, res) => {
     
     let context = `
       You are an assistant trained on the following questions and answers in "${lang}" language:\n
-
       1. If the user asks about a dish, list its ingredients from your general knowledge.
       2. Then, match those ingredients to the product list below and suggest products available with the product price at Balady Mart.
-      3. Always respond in the same language the user uses.`;
+      3. After listing the products, ALWAYS include the matched product IDs in the following exact format at the END of your response:
+      prod_ids: [1, 2, 3]
+      (Use the actual matching product IDs from the list below. The ID list must be a valid JavaScript array with numbers and no quotes.)
+      4. Always respond in the same language the user uses.
+      5. If the user question matches or is similar to any of the questions below (even partially), return the exact answer from the dataset — do NOT generate a new answer.
+      6. If no relevant answer is found in either the questions or product list, respond with exactly: "No relevant answer found."
+`;
 
     questions.forEach((q) => {
       context += `Question: ${q.locales[0].question}\nAnswer: ${q.locales[0].answer}\n`;
     });
     products.forEach((p) => {
-      context += `Product (EN): ${p.name_en}\n
+      context += `
+      Product ID: ${p.id}\n
+      Product (EN): ${p.name_en}\n
       Product (AR): ${p.name_ar}\n
       Price (EN): ${p.price} QAR\n
       Price (AR): ${p.price} ر.ق\n
