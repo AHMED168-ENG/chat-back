@@ -1,2 +1,33 @@
+<<<<<<< HEAD
 2025-06-23T10:59:42.809Z error: TypeError: Cannot read properties of undefined (reading 'error')
     at data.askQuestion (D:\Projects\Companies\Luminar\Zaky's Code\chat-back\controllers\chatgpt.js:134:55)
+=======
+2025-06-23T09:43:09.365Z error: TypeError: Cannot read properties of undefined (reading 'error')
+    at data.askQuestion (D:\chat application\backend\controllers\chatgpt.js:161:55)
+2025-06-23T10:07:22.056Z error: SequelizeDatabaseError: relation "pending_questions" does not exist
+    at Query.formatError (D:\chat application\backend\node_modules\sequelize\lib\dialects\postgres\query.js:354:16)
+    at D:\chat application\backend\node_modules\sequelize\lib\dialects\postgres\query.js:71:18
+    at tryCatcher (D:\chat application\backend\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\chat application\backend\node_modules\bluebird\js\release\promise.js:547:31)
+    at Promise._settlePromise (D:\chat application\backend\node_modules\bluebird\js\release\promise.js:604:18)
+    at Promise._settlePromise0 (D:\chat application\backend\node_modules\bluebird\js\release\promise.js:649:10)
+    at Promise._settlePromises (D:\chat application\backend\node_modules\bluebird\js\release\promise.js:725:18)
+    at _drainQueueStep (D:\chat application\backend\node_modules\bluebird\js\release\async.js:93:12)
+    at _drainQueue (D:\chat application\backend\node_modules\bluebird\js\release\async.js:86:9)
+    at Async._drainQueues (D:\chat application\backend\node_modules\bluebird\js\release\async.js:102:5)
+    at Async.drainQueues (D:\chat application\backend\node_modules\bluebird\js\release\async.js:15:14)
+    at process.processImmediate (node:internal/timers:485:21)
+2025-06-23T10:08:16.698Z error: SequelizeDatabaseError: column "id" of relation "pending_questions" does not exist
+    at Query.formatError (D:\chat application\backend\node_modules\sequelize\lib\dialects\postgres\query.js:354:16)
+    at D:\chat application\backend\node_modules\sequelize\lib\dialects\postgres\query.js:71:18
+    at tryCatcher (D:\chat application\backend\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\chat application\backend\node_modules\bluebird\js\release\promise.js:547:31)
+    at Promise._settlePromise (D:\chat application\backend\node_modules\bluebird\js\release\promise.js:604:18)
+    at Promise._settlePromise0 (D:\chat application\backend\node_modules\bluebird\js\release\promise.js:649:10)
+    at Promise._settlePromises (D:\chat application\backend\node_modules\bluebird\js\release\promise.js:725:18)
+    at _drainQueueStep (D:\chat application\backend\node_modules\bluebird\js\release\async.js:93:12)
+    at _drainQueue (D:\chat application\backend\node_modules\bluebird\js\release\async.js:86:9)
+    at Async._drainQueues (D:\chat application\backend\node_modules\bluebird\js\release\async.js:102:5)
+    at Async.drainQueues (D:\chat application\backend\node_modules\bluebird\js\release\async.js:15:14)
+    at process.processImmediate (node:internal/timers:485:21)
+>>>>>>> 65ba22c26e6735f14ba00a3123916dbd61382bed
