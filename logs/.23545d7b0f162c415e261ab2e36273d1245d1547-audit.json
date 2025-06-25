@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/home/chat-back/logs/.23545d7b0f162c415e261ab2e36273d1245d1547-audit.json",
+    "files": [
+        {
+            "date": 1750678823404,
+            "name": "/home/chat-back/logs/error-2025-06-23.log",
+            "hash": "56dea20c196822b71f2ef686a5916eaa1121309cc2f43173e6c7e2f0c376f616"
+        },
+        {
+            "date": 1750840826851,
+            "name": "/home/chat-back/logs/error-2025-06-25.log",
+            "hash": "527d528048f1d15d6c841916669786d864fc40401206594f18c65daaa0cce8e9"
+        }
+    ],
+    "hashType": "sha256"
+}
