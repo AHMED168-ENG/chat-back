@@ -76,9 +76,44 @@ data.getAllQuestions = async (req, res) => {
   }
 };
 
+// data.getSpecificQuestion = async (req, res) => {
+//   try {
+//     const lang = req.headers.lang || "en";
+//     let question = await QuestionsModel.findOne({
+//       where: { id: req.params.id },
+//       include: [
+//         {
+//           model: QuestionsLocalesModel,
+//           as: "locales",
+//           attributes: ["id", "locale", "question", "answer"],
+//         },
+//       ],
+//     });
+
+//     if (!question) {
+//       return res.status(404).json({
+//         ack: 0,
+//         msg: language[lang].questions.question_not_found,
+//       });
+//     }
+
+//     res.status(200).json({
+//       ack: 1,
+//       question,
+//     });
+//   } catch (e) {
+//     console.error("Error in getSpecificQuestion:", e);
+//     res.status(400).json({
+//       ack: 0,
+//       msg: language[req.headers.lang || "en"].questions.questions.error,
+//     });
+//   }
+// };
+
 data.getSpecificQuestion = async (req, res) => {
   try {
     const lang = req.headers.lang || "en";
+
     let question = await QuestionsModel.findOne({
       where: { id: req.params.id },
       include: [
@@ -97,9 +132,25 @@ data.getSpecificQuestion = async (req, res) => {
       });
     }
 
+    // تحويل البيانات إلى الشكل المطلوب
+    const enLocale = question.locales.find((locale) => locale.locale === "en");
+    const arLocale = question.locales.find((locale) => locale.locale === "ar");
+
+    const formattedQuestion = {
+      id: question.id,
+      questionEn: enLocale ? enLocale.question : null,
+      questionAr: arLocale ? arLocale.question : null,
+      answerEn: enLocale ? enLocale.answer : null,
+      answerAr: arLocale ? arLocale.answer : null,
+      keywords_en: question.keywords_en,
+      keywords_ar: question.keywords_ar,
+      createdAt: question.createdAt,
+      updatedAt: question.updatedAt,
+    };
+
     res.status(200).json({
       ack: 1,
-      question,
+      question: formattedQuestion,
     });
   } catch (e) {
     console.error("Error in getSpecificQuestion:", e);
