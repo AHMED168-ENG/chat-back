@@ -6,14 +6,9 @@
     "auditLog": "D:\\chat application\\backend\\logs\\.018ecb66797ebc3c98d3e1d588cdb91556e61118-audit.json",
     "files": [
         {
-            "date": 1750269516895,
-            "name": "D:\\chat application\\backend\\logs\\error-2025-06-18.log",
-            "hash": "feeba09135753016d82b67b7b3a8ae8768cb99251902623fea0ea5695b09babd"
-        },
-        {
-            "date": 1750671545453,
-            "name": "D:\\chat application\\backend\\logs\\error-2025-06-23.log",
-            "hash": "86fd7fce13df18e662b72d9cf47bb8131d2cfd6dc0136c77c42b9c5fa49b9cf9"
+            "date": 1753945747521,
+            "name": "D:\\chat application\\backend\\logs\\error-2025-07-31.log",
+            "hash": "c01b40c792cd3b3345ef5ceb536695072a8de58e3adad3fb6344dbdd994c982d"
         }
     ],
     "hashType": "sha256"

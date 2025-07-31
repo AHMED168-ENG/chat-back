@@ -20,7 +20,11 @@ router.get(
   validateJoi(getQuestionsSchema, "query"),
   Questions.getAllQuestions
 );
-router.get("/specific/:id", authenticateUser, Questions.getSpecificQuestion);
+router.get(
+  "/specific/:id",
+  // authenticateUser,
+  Questions.getSpecificQuestion
+);
 router.post(
   "/add",
   // authenticateUser,
