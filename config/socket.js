@@ -402,6 +402,9 @@ const setupSocket = (server) => {
           ],
           order: [["created_at", "ASC"]],
         });
+        console.log("*".repeat(20));
+        console.log(queuedConversation);
+        console.log("*".repeat(20));
 
         if (!queuedConversation) {
           console.log("No queued or pending conversations found.");
