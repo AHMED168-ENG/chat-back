@@ -16,6 +16,8 @@ let data = {};
 data.startConversation = async (req, res) => {
   try {
     const { userId, subject, priority = 1 } = req.body;
+    console.log("start new conversation " + userId);
+
     const lang = req.headers.lang || "en";
 
     const existingConversation = await ChatConversations.findOne({
@@ -58,7 +60,7 @@ data.startConversation = async (req, res) => {
     }
 
     const conversation = await ChatConversations.create(conversationData);
-
+    console.log("agentId " + agentId);
     if (!agentId) {
       await ChatQueue.create({
         customer_id: userId,
