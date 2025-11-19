@@ -390,7 +390,7 @@ const setupSocket = (server) => {
     setInterval(async () => {
       try {
         // جلب أول محادثة في الطابور أو اللي في حالة pending
-        console.log(await ChatQueue.findOne());
+        // console.log(await ChatQueue.findOne());
         const queuedConversation = await ChatQueue.findOne({
           include: [
             {
@@ -403,7 +403,7 @@ const setupSocket = (server) => {
           order: [["created_at", "ASC"]],
         });
         console.log("*".repeat(20));
-        console.log(queuedConversation);
+        console.log(queuedConversation.conversation);
         console.log("*".repeat(20));
 
         if (!queuedConversation) {
