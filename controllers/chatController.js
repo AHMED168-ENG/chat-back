@@ -66,6 +66,7 @@ data.startConversation = async (req, res) => {
         position: conversation.queue_position,
         created_at: new Date(),
       });
+      console.log("create chat queue in start conversation");
     } else {
       // إرسال إشعار للوكيل باستخدام socket_id
       const agent = await OnlineAgents.findOne({

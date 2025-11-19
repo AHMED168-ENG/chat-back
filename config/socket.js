@@ -403,7 +403,7 @@ const setupSocket = (server) => {
           order: [["created_at", "ASC"]],
         });
         console.log("*".repeat(20));
-        console.log(queuedConversation.conversation);
+        console.log(queuedConversation?.conversation);
         console.log("*".repeat(20));
 
         if (!queuedConversation) {
