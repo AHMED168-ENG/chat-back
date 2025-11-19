@@ -390,11 +390,12 @@ const setupSocket = (server) => {
     setInterval(async () => {
       try {
         // جلب أول محادثة في الطابور أو اللي في حالة pending
+        console.log(await ChatQueue.findOne());
         const queuedConversation = await ChatQueue.findOne({
           include: [
             {
               model: ChatConversations,
-              where: { status: "waiting" },
+              // where: { status: "waiting" },
               as: "conversation",
               required: true,
             },
