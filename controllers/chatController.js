@@ -75,6 +75,10 @@ data.startConversation = async (req, res) => {
         where: { agent_id: agentId },
       });
 
+      console.log("agent data");
+      console.log(agent);
+      console.log("agent data");
+
       if (agent && agent.socket_id) {
         global.io.to(agent.socket_id).emit("agent_assigned", {
           conversation_id: conversation.id,
