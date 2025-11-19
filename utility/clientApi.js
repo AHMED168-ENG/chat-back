@@ -1,11 +1,17 @@
-const axios = require('axios');
-require('dotenv').config();
+const axios = require("axios");
+require("dotenv").config();
 
 const getAvailableAgent = async () => {
   try {
-    const response = await axios.get("http://154.38.168.35:8080/crm/queue/next", {
-      headers: { "x-api-key": "Baladi-Express-CRM_API-keysdf443w>%45<rt4t*1sd1!fd@1s#c23%445" },
-    });
+    const response = await axios.get(
+      `${process.env.CRM_QUEUE_API}/crm/queue/next`,
+      {
+        headers: {
+          "x-api-key":
+            "Baladi-Express-CRM_API-keysdf443w>%45<rt4t*1sd1!fd@1s#c23%445",
+        },
+      }
+    );
     return {
       agentId: response.data.agentId || null,
       agentName: response.data.username || null,
