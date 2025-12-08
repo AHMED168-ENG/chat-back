@@ -396,9 +396,9 @@ const setupSocket = (server) => {
           include: [
             {
               model: ChatConversations,
-              where: { status: "waiting" },
+              // where: { status: "waiting" },
               as: "conversation",
-              required: true,
+              // required: true,
             },
           ],
           order: [["created_at", "ASC"]],
