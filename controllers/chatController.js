@@ -42,6 +42,7 @@ data.startConversation = async (req, res) => {
     }
 
     const { agentId, agentName } = await getAvailableAgent();
+    console.log(agentId, agentName);
     // console.log(agentId, agentName);
     const conversationData = {
       customer_id: userId,
