@@ -36,6 +36,7 @@ const setupSocket = (server) => {
     // await ChatQueue.destroy({ where: {} });
     console.log("user connect" + socket.id);
     socket.on("register_agent", async ({ agentId, agentName }) => {
+      console.log({ agentId, agentName });
       try {
         const agent = await OnlineAgents.findOne({
           where: { agent_id: agentId },

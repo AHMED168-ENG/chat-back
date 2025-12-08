@@ -44,7 +44,7 @@ const OnlineAgents = sequelize.define(
     },
   },
   {
-    tableName: "online_agents", 
+    tableName: "online_agents",
     timestamps: true,
     createdAt: "created_at",
     updatedAt: false,
