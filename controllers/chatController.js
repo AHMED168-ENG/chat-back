@@ -403,7 +403,9 @@ data.assignAgent = async (req, res) => {
 
     // التحقق من الوكيل أو إنشاؤه لو مش موجود
     let agent = await OnlineAgents.findOne({ where: { agent_id } });
+    console.log("agent");
     console.log(agent);
+    console.log("agent");
     if (!agent) {
       // إنشاء وكيل جديد بإعدادات افتراضية
       agent = await OnlineAgents.create({
