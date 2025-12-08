@@ -391,7 +391,7 @@ const setupSocket = (server) => {
     setInterval(async () => {
       try {
         // جلب أول محادثة في الطابور أو اللي في حالة pending
-        // console.log(await ChatQueue.findOne());
+        console.log(await ChatQueue.findOne());
         const queuedConversation = await ChatQueue.findOne({
           include: [
             {
