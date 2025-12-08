@@ -396,14 +396,15 @@ const setupSocket = (server) => {
           include: [
             {
               model: ChatConversations,
-              // where: { status: "waiting" },
+              where: { status: "waiting" },
               as: "conversation",
-              // required: true,
+              required: true,
             },
           ],
           order: [["created_at", "ASC"]],
         });
         console.log("*".repeat(20));
+        console.log(queuedConversation);
         console.log(queuedConversation?.conversation);
         console.log("*".repeat(20));
 
